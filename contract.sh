@@ -109,7 +109,7 @@ module.exports = {
   networks: {
     somnia: {
       url: "https://dream-rpc.somnia.network", // Replace with the Somnia network RPC URL
-      accounts: [0x${process.env.PRIVATE_KEY}],     // Replace with your private key or use environment variables for security
+      accounts: [process.env.PRIVATE_KEY ? `0x${process.env.PRIVATE_KEY}` : ""],     // Replace with your private key or use environment variables for security
     },
   },
 };
@@ -123,9 +123,9 @@ EOL
 
 # Step 6: Create deploy script
 echo "Creating deploy script..."
-rm -rf scripts/Lock.ts
+rm -rf ignition/modules/Lock.ts
 
-cat <<EOL > scripts/deploy.ts
+cat <<EOL > ignition/modules/deploy.ts
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
 const BuyMeCoffee = buildModule("BuyMeCoffee", (m) => {
