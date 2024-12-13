@@ -1,3 +1,18 @@
+#!/bin/bash
+
+BOLD=$(tput bold)
+RESET=$(tput sgr0)
+YELLOW=$(tput setaf 3)
+
+print_command() {
+  echo -e "${BOLD}${YELLOW}$1${RESET}"
+}
+
+# Logo
+echo -e "\033[0;34m"
+echo "Logo is comming soon..."
+echo -e "\e[0m"
+
 # Step 1: Install hardhat
 echo "Install Hardhat..."
 npm init -y
@@ -108,25 +123,17 @@ EOL
 
 # Step 6: Create deploy script
 echo "Creating deploy script..."
-mkdir scripts
+rm -rf scripts/Lock.ts
 
-cat <<EOL > scripts/deploy.js
-const { ethers } = require("hardhat");
+cat <<EOL > scripts/deploy.ts
+import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
-async function main() {
-    const [deployer] = await ethers.getSigners();
-    const initialSupply = ethers.utils.parseUnits("1000000", "ether");
-
-    const Token = await ethers.getContractFactory("MyToken");
-    const token = await Token.deploy(initialSupply);
-
-    console.log("Token deployed to:", token.address);
-}
-
-main().catch((error) => {
-    console.error(error);
-    process.exit(1);
+const BuyMeCoffee = buildModule("BuyMeCoffee", (m) => {
+  const contract = m.contract("BuyMeCoffee");
+  return { contract };
 });
+
+module.exports = BuyMeCoffee;
 EOL
 
 # Step 7: Compile contracts
@@ -134,10 +141,10 @@ echo "Compile your contracts..."
 npx hardhat compile
 
 # "Waiting before deploying..."
-sleep 10
+sleep 3
 
 # Step 8: Deploy the contract to the Hemi network
 echo "Deploy your contracts..."
-npx hardhat run scripts/deploy.js --network rome
+npx hardhat ignition deploy ./ignition/modules/deploy.ts --network somnia
 
 echo "Thank you!"
