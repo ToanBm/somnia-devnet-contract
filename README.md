@@ -2,7 +2,7 @@
 
 ### 1. Clone the repository
 ```Bash
-git clone https://github.com/ToanBm/rome-devnet-contract.git && cd rome-devnet-contract
+git clone https://github.com/ToanBm/somnia-devnet-contract.git && cd somnia-devnet-contract
 ```
 ### 2. Run the setup script
 ```Bash
